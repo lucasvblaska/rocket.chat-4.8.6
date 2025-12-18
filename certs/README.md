@@ -24,9 +24,11 @@ Common Name: GTF-CA-INTERNA
 
 ETAPA 2 — Gerar certificado do Rocket.Chat
 Chave privada do servidor
+
 openssl genrsa -out chat.gtf.ind.br.key 2048
 
 Criar o CSR (pedido de certificado)
+
 openssl req -new \
 -key chat.gtf.ind.br.key \
 -out chat.gtf.ind.br.csr
@@ -57,6 +59,7 @@ EOF
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ETAPA 4 — Assinar o certificado com a CA
+
 openssl x509 -req \
 -in chat.gtf.ind.br.csr \
 -CA ca.crt \
@@ -70,6 +73,7 @@ openssl x509 -req \
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ETAPA 5 — Organizar os arquivos
+
 mkdir -p certs
 cp chat.gtf.ind.br.crt certs/
 cp chat.gtf.ind.br.key certs/
