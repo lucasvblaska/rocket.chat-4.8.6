@@ -1,0 +1,79 @@
+
+services:
+  app:
+    image: rocketchat/rocket.chat:4.8.6
+    command: >
+      bash -c
+        "for i in `seq 1 30`; do
+          node main.js &&
+          s=$$? && break || s=$$?;
+          echo \"Tried $$i times. Waiting 5 secs...\";
+          sleep 5;
+        done; (exit $$s)"
+    restart: unless-stopped
+    volumes:
+      - ./uploads:/app/uploads
+    environment:
+      - PORT=3000
+      - ROOT_URL=http://localhost:3000
+      - MONGO_URL=mongodb://mongo:27017/rocketchat
+      - MONGO_OPLOG_URL=mongodb://mongo:27017/local
+    depends_on:
+      - mongo
+    ports:
+      - 3000:3000
+    networks:
+      - default
+
+  mongo:
+    image: mongo:5
+    restart: unless-stopped
+    volumes:
+      - ./data/db:/data/db
+      - ./data/dump:/dump
+    command: mongod --oplogSize 128 --replSet rs0
+    ports:
+      - "27017:27017"
+    networks:
+      - default
+
+  mongo-init-replica:
+    image: mongo:5
+    depends_on:
+      - mongo
+    command: >
+      bash -c
+        "for i in `seq 1 30`; do
+          mongo mongo/rocketchat --eval \"
+            rs.initiate({
+              _id: 'rs0',
+              members: [ { _id: 0, host: 'mongo:27017' } ]
+            })\" &&
+          s=$$? && break || s=$$?;
+          echo \"Tried $$i times. Waiting 5 secs...\";
+          sleep 5;
+        done; (exit $$s)"
+    networks:
+      - default
+
+#  hubot:
+#    image: rocketchat/hubot-rocketchat:latest
+#    restart: unless-stopped
+#    environment:
+#      - ROCKETCHAT_URL=app:3000
+#      - ROCKETCHAT_ROOM=GENERAL
+#      - ROCKETCHAT_USER=bot
+#      - ROCKETCHAT_PASSWORD=botpassword
+#      - BOT_NAME=bot
+#      - EXTERNAL_SCRIPTS=hubot-help,hubot-seen,hubot-links,hubot-diagnostics
+#    depends_on:
+#      - app
+#    volumes:
+#      - ./scripts:/home/hubot/scripts
+#    ports:
+#      - 3001:8080
+#    networks:
+#      - default
+
+networks:
+  default:
