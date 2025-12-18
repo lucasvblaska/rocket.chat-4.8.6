@@ -1,0 +1,7 @@
+{
+  "https": {
+    "port": 3000,
+    "key": "/certs/chat.gtf.ind.br.key",
+    "cert": "/certs/chat.gtf.ind.br.crt"
+  }
+}

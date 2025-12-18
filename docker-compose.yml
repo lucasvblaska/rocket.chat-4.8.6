@@ -13,6 +13,8 @@ services:
     restart: unless-stopped
     volumes:
       - ./uploads:/app/uploads
+      - ./certs:/certs:ro
+      - ./settings.json:/app/settings.json:ro
     environment:
       - PORT=3000
       - ROOT_URL=http://localhost:3000
