@@ -14,8 +14,8 @@ openssl req -x509 -new -nodes -key ca.key \
 Quando perguntar, use algo assim:
 
 Country Name: BR
-State: SP
-Locality: SuaCidade
+State: SC
+Locality: Joinville
 Organization Name: GTF
 Organizational Unit: TI
 Common Name: GTF-CA-INTERNA
