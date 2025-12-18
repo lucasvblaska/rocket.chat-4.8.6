@@ -1,11 +1,14 @@
 ETAPA 1 — Criar a CA interna (uma vez só)
+
 mkdir -p ~/ca && cd ~/ca
 
 
 Chave da CA
+
 openssl genrsa -out ca.key 4096
 
 Certificado da CA (10 anos)
+
 openssl req -x509 -new -nodes -key ca.key \
 -sha256 -days 3650 -out ca.crt
 
