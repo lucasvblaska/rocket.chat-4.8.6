@@ -87,5 +87,8 @@ chmod 644 certs/chat.gtf.ind.br.crt
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ETAPA 6 — Confiar na CA nos clientes (obrigatório)
+
 Windows (manual)
 certmgr.msc
+
+→ Autoridades de Certificação Raiz Confiáveis → Importar ca.crt
